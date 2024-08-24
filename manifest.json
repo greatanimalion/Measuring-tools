@@ -18,19 +18,12 @@
     "background": {
       "service_worker": "background/service-worker.js"
     },
-    "permissions": [],
+    "permissions": ["notifications","tabs"],
     "host_permissions": [],
     "content_scripts": [
       {
-        "js": [
-          "content/content.js"
-        ],
-        "matches": [
-          "http://127.0.0.1:5500/*"
-        ],
-        "all_frames": true,
-        "run_at": "document_end",
-        "match_about_blank": true
+        "js": ["content/content.js"],
+        "matches": ["*://*/*"]
       }
     ]
   }
