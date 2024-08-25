@@ -1,11 +1,11 @@
-import{i as s}from"../js/iframe-B894oyg8.js";var n=(e=>(e.close="closeMeasureTool",e.open="openMeasureTool",e))(n||{});const t="inject-D"+Date.now().toString(),r=`
+var n=(o=>(o.close="closeMeasureTool",o.open="openMeasureTool",o))(n||{});const s={height:"400px",width:"300px"},t="inject-D"+Date.now().toString(),r=`
     .${t}{
     outline: 1px solid red;
     }
-`;let i=null;const l=e=>{let o=document.elementFromPoint(e.clientX,e.clientY);o.tagName!=="IFRAME"&&o!==i&&(i&&i.classList.remove(t),i=o,o&&o.classList.add(t),console.log(i))},d=e=>{n.open?window.addEventListener("mousemove",l):n.close&&window.removeEventListener("mousemove",l)},m=e=>{if(e==n.open){const o=document.querySelector(t)||window.document.createElement("style");o.className=t,o.innerHTML=r,window.document.head.appendChild(o)}else if(e==n.close){const o=document.querySelector("."+t);o&&o.remove()}},a=e=>{if(e==n.open){const o=document.querySelector("#"+t)||document.createElement("iframe");o.id=t,o.style.cssText=`width: ${s.width};
+`;let i=null;const c=o=>{let e=document.elementFromPoint(o.clientX,o.clientY);e&&e.tagName==="IFRAME"||e!==i&&(i&&i.classList.remove(t),i=e,e&&e.classList.add(t))},d=o=>{n.open?window.addEventListener("mousemove",c):n.close&&window.removeEventListener("mousemove",c)},m=o=>{if(o==n.open){const e=document.querySelector(t)||window.document.createElement("style");e.className=t,e.innerHTML=r,window.document.head.appendChild(e)}else if(o==n.close){const e=document.querySelector("."+t);e&&e.remove()}},a=o=>{if(o==n.open){const e=document.querySelector("#"+t)||document.createElement("iframe");e.id=t,e.style.cssText=`width: ${s.width};
                                        height: ${s.height};
                                        position: fixed;
                                        z-index: 10000002; 
                                        border: none;
                                        top: 10px;
-                                       left: 10px;`;const c=chrome.runtime.getURL("contentPage/index.html");o.src=c,document.body.appendChild(o)}else e==n.close&&document.querySelector(`#${t}`)&&document.querySelector(`#${t}`).remove()};chrome.runtime.onMessage.addListener(e=>{m(e.info),d(e.info),a(e.info)});
+                                       left: 10px;`;const l=chrome.runtime.getURL("contentPage/index.html");e.src=l,document.body.appendChild(e)}else o==n.close&&document.querySelector(`#${t}`)&&document.querySelector(`#${t}`).remove()};chrome.runtime.onMessage.addListener(o=>{m(o.info),d(o.info),a(o.info)});

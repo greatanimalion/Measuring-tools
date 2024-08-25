@@ -10,12 +10,11 @@ let preEl: Element | null = null
 
 const  MeasureTools = (event: MouseEvent) => {
     let cur = document.elementFromPoint(event.clientX, event.clientY)!
-    if(cur.tagName === 'IFRAME')return 
+    if(cur&&cur.tagName === 'IFRAME')return 
     if (cur !== preEl) {
         preEl && preEl.classList.remove(timeS)
         preEl = cur
         cur && cur.classList.add(timeS)
-        console.log(preEl)
     }
 }
 //@ts-ignore
