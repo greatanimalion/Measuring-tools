@@ -1,11 +1,11 @@
 #app {
     width: 261px;
     margin: 0 auto;
-    height: 376px;
-    padding: 5px;
+    height: 300px;
+    padding: 10px;
     margin-top: 5px;
     background-color: #fff;
-    border-radius: 3px;
+    border-radius: 5px;
     box-shadow: 0 0 7px 1px #a5a5a5;
 }
 

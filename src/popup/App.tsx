@@ -26,19 +26,18 @@ export default function App() {
             })
         })
     }
-    const handel = (e: boolean) => {
-        try {
-            if (e) openMeasureTool()
-            else closeMeasureTool()
-        } catch (e) {
-            console.log(e)
-        }
-
+    let e = false
+    const handel = () => {
+        e = !e
+        if(e){openMeasureTool();console.log("open")}
+        else{closeMeasureTool();console.log("close")}
     }
     return <>
         <div id="app">
-            <button onClick={() => handel(true)}>开启测量工具</button>
-            <button onClick={() => handel(false)}>关闭测量工具</button>
+            <div className="toggle normal" >
+                <input id="normal" type="checkbox" />
+                <label onClick={handel} className="toggle-item" htmlFor="normal"></label>
+            </div>
         </div>
     </>;
 }
