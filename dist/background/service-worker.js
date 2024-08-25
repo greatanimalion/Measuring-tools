@@ -1,0 +1,1 @@
+chrome.runtime.onMessage.addListener(i=>{i.action==="fromPopup"&&chrome.notifications.create({type:"basic",title:"Notifications Title",message:"Notifications message to display",iconUrl:"../icons/icon.png"},o=>{console.log("notificationId-->",o)})});

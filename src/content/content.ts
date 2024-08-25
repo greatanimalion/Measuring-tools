@@ -1,8 +1,6 @@
-const timeS = "inject-css-D" + Date.now().toString()
-enum eventTypes {
-    close = 'closeMeasureTool',
-    open = 'openMeasureTool'
-}
+import { eventTypes } from '../types/eventTypes'
+import { iframe } from '../const/iframe'
+const timeS = "inject-D" + Date.now().toString()
 const style = `
     .${timeS}{
     outline: 1px solid red;
@@ -10,31 +8,7 @@ const style = `
 `
 let preEl: Element | null = null
 
-console.log('content file')
-const init = () => {
-  const addIframe = (id: string, pagePath: string) => {
-    const contentIframe = document.createElement("iframe");
-    contentIframe.id = id;
-    contentIframe.style.cssText = `width: 300px;
-                                   height: 500px;
-                                   position: fixed;
-                                   z-index: 10000002; 
-                                   border: none;
-                                   top: 10px;
-                                   left: 10px;`;
-    const getContentPage = chrome.runtime.getURL(pagePath);
-    contentIframe.src = getContentPage;
-    document.body.appendChild(contentIframe);
-  }
-
-  addIframe('content-start-iframe', 'contentPage/index.html')
-}
-
-// 判断 window.top 和 self 是否相等，如果不相等，则不注入 iframe
-// if (window.top === window.self) {
-//     init();
-//   }
-const handleEvent = (event: MouseEvent) => {
+const  MeasureTools = (event: MouseEvent) => {
     let cur = document.elementFromPoint(event.clientX, event.clientY)!
     if(cur.tagName === 'IFRAME')return 
     if (cur !== preEl) {
@@ -45,17 +19,15 @@ const handleEvent = (event: MouseEvent) => {
     }
 }
 //@ts-ignore
-const MeasureTools = (e: string) => {
-
+const handleEvent = (e: string) => {
     if (e = eventTypes.open) {
-        init()
-        window.addEventListener('mousemove', handleEvent)
+        window.addEventListener('mousemove', MeasureTools)
     } else if (e = eventTypes.close) {
-        window.removeEventListener('mousemove', handleEvent)
+        window.removeEventListener('mousemove', MeasureTools)
     }
 }
 //@ts-ignore
-const handeCss = (e: string) => {
+const handleCss = (e: string) => {
     if (e == eventTypes.open) {
         const styleEl = document.querySelector(timeS) || window.document.createElement('style')
         styleEl.className = timeS
@@ -66,11 +38,31 @@ const handeCss = (e: string) => {
         styleEl && styleEl.remove()
     }
 }
+//@ts-ignore
+const handlePage=(e:string)=>{
+    if(e==eventTypes.open){
+        const contentIframe =document.querySelector("#"+timeS) as HTMLIFrameElement || document.createElement("iframe");
+        contentIframe.id =timeS;
+        contentIframe.style.cssText = `width: ${iframe.width};
+                                       height: ${iframe.height};
+                                       position: fixed;
+                                       z-index: 10000002; 
+                                       border: none;
+                                       top: 10px;
+                                       left: 10px;`;
+        const getContentPage = chrome.runtime.getURL('contentPage/index.html');
+        contentIframe.src = getContentPage;
+        document.body.appendChild(contentIframe);
+    }else if(e==eventTypes.close){
+        document.querySelector(`#${timeS}`) && document.querySelector(`#${timeS}`)!.remove()
+    }
+}
 chrome.runtime.onMessage.addListener((request) => {
     //css移出|添加
-    handeCss(request.info)
+    handleCss(request.info)
     //js关闭|开启
-    MeasureTools(request.info)
-
+    handleEvent(request.info)
+    //iframe移出|添加
+    handlePage(request.info)
     return undefined
 })
