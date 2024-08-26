@@ -32,6 +32,7 @@ export default function App() {
         if(e){openMeasureTool();console.log("open")}
         else{closeMeasureTool();console.log("close")}
     }
+    
     return <>
         <div id="app">
             <div className="toggle normal" >

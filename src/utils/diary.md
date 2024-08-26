@@ -1,0 +1,5 @@
+- window.postMessage中的window指的是你想发送跨域消息的那个窗口(你需要通信的目标窗口)，而不是自身窗口的window
+
+- 父页面中：父页面向子页面发送跨域信息，window就是在父页面中嵌入的iframe指向的子页面的window，即：iFrame.contentWindow子页面中：子页面想父页面发送跨域信息
+- window就是父页面的window，在这里因为子页面是嵌入到父页面中的，对于子页面来讲，window就是top或者parent
+- 需要等到iframe中的子页面加载完成后才发送消息，否则子页面接收不到消息在监听message事件时需要判断一下消息来源origin

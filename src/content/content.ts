@@ -1,12 +1,14 @@
 import { eventTypes } from '../types/eventTypes'
 import { iframe } from '../const/iframe'
 import dragImg from '../assets/drag.png'
+import PostMessage from '../utils/postMessage'
 const timeS = "inject-D" + Date.now().toString()
 const style = `
     .${timeS}{
     outline: 1px solid red;
     }
 `
+let postMessage:any;
 let preEl: Element | null = null
 let dragOpen = false;
 let dragTarget: HTMLElement | null = null;
@@ -14,32 +16,34 @@ let dragTarget: HTMLElement | null = null;
 let centralEl: HTMLElement | null = null;
 let onCneter = false;
 
-const MeasureTools = (event: MouseEvent) => {    
+const MeasureTools = (event: MouseEvent) => {
     if (dragOpen) {
         if (dragTarget) {
             dragTarget.style.top = event.clientY + "px";
             dragTarget.style.left = event.clientX + "px";
         }
     }
-    if(onCneter)return 
+    if (onCneter) return
     let cur = document.elementFromPoint(event.clientX, event.clientY)!
-    if (cur && (cur.tagName === 'IFRAME' || cur.id === timeS||cur.id===timeS+'-')) return
+    if (cur && (cur.tagName === 'IFRAME' || cur.id === timeS || cur.id === timeS + '-')) return
     if (cur !== preEl) {
         preEl && preEl.classList.remove(timeS)
         preEl = cur
         cur && cur.classList.add(timeS)
-        centralEl=cur as HTMLDivElement
+        centralEl = cur as HTMLDivElement
     }
 }
 const centralElClick = (e: KeyboardEvent) => {
-    let keyNum=window.event ? e.keyCode :e.which;  
+    let keyNum = window.event ? e.keyCode : e.which;
     if (keyNum === 81) {
         onCneter = !onCneter;
-        if (!onCneter) {  centralEl=null}
-        console.log(centralEl);
+        if (!onCneter) {
+            centralEl = null
+        }
+        else {
+            postMessage.send("hello")
+        }
     }
-   
-    
 }
 //@ts-ignore
 const handleEvent = (e: string) => {
@@ -83,7 +87,7 @@ const handlePage = (e: string) => {
                              padding: 10px;`
         let img = document.createElement('img')
         img.src = dragImg;
-        img.id=timeS+'-'
+        img.id = timeS + '-'
         img.style.cssText = `width: 20px;
                             height: 20px;
                             position: absolute;
@@ -95,10 +99,14 @@ const handlePage = (e: string) => {
         document.body.appendChild(div);
         dragTarget = div
         img.onclick = () => {
-            dragOpen=!dragOpen;
+            dragOpen = !dragOpen;
             if (dragOpen) img.style.cursor = 'grabbing';
             else img.style.cursor = 'grab';
         }
+        //@ts-ignore
+        postMessage = new PostMessage(contentIframe.contentWindow)
+        postMessage.send("hello")
+
     } else if (e == eventTypes.close) {
         document.querySelector(`#${timeS}`) && document.querySelector(`#${timeS}`)!.remove()
     }
