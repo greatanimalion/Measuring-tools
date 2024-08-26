@@ -1,4 +1,6 @@
+import { Slider } from '@mui/material';
 import './App.css'
+import Button from '@mui/material/Button';
 export default function App() {
     const openMeasureTool = () => {
         chrome.tabs.query({
@@ -26,18 +28,13 @@ export default function App() {
             })
         })
     }
-    let e = false
-    const handel = () => {
-        e = !e
-        if(e){openMeasureTool();console.log("open")}
-        else{closeMeasureTool();console.log("close")}
-    }
-    
+
     return <>
         <div id="app">
-            <div className="toggle normal" >
-                <input id="normal" type="checkbox" />
-                <label onClick={handel} className="toggle-item" htmlFor="normal"></label>
+            <Button variant="outlined" onClick={openMeasureTool}>开启</Button>
+            <Button onClick={closeMeasureTool} variant="outlined" color="error" style={{marginLeft: '10px'}}>关闭</Button>
+            <div id='control'>
+            <Slider defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
             </div>
         </div>
     </>;

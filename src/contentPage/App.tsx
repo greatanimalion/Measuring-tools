@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
 import './App.css'
-
+import Text from './components/TestContent'
 export default function App() {
 
     useEffect(() => {
-
         window.addEventListener('message', (e) => {
             console.log(e);
             top?.postMessage('ok',"*")
@@ -13,7 +12,7 @@ export default function App() {
     return <>
         <div>
             <div id="app">
-                <div>当前元素信息</div>
+                <Text />
             </div>
         </div>
 
