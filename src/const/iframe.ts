@@ -1,4 +1,4 @@
 export const iframe= {
-    height:'333px',
-    width:'300px',
+    height:'300px',
+    width:'270px',
 }

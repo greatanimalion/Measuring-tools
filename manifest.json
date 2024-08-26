@@ -33,7 +33,8 @@
   ],
   "permissions": [
     "notifications",
-    "tabs"
+    "tabs",
+    "storage"
   ],
   "host_permissions": [],
   "content_scripts": [

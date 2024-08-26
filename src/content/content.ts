@@ -2,13 +2,14 @@ import { eventTypes } from '../types/eventTypes'
 import { iframe } from '../const/iframe'
 import dragImg from '../assets/drag.png'
 import PostMessage from '../utils/postMessage'
+import type { Message } from '../types/message'
 const timeS = "inject-D" + Date.now().toString()
 const style = `
     .${timeS}{
     outline: 1px solid red;
     }
 `
-let postMessage:any;
+let postMessage: any;
 let preEl: Element | null = null
 let dragOpen = false;
 let dragTarget: HTMLElement | null = null;
@@ -67,14 +68,18 @@ const handleCss = (e: string) => {
         styleEl && styleEl.remove()
     }
 }
+let DIV: HTMLDivElement | null = null;
 //@ts-ignore
 const handlePage = (e: string) => {
     if (e == eventTypes.open) {
         const contentIframe = document.querySelector("#" + timeS) as HTMLIFrameElement || document.createElement("iframe");
         contentIframe.id = timeS;
+        console.log(iframe.width, iframe.height);
+
         contentIframe.style.cssText = `width: ${iframe.width};
                                        height: ${iframe.height};
                                        border: none;
+                                       border-radius: 10px;
                                      `;
         const getContentPage = chrome.runtime.getURL('contentPage/index.html');
         contentIframe.src = getContentPage;
@@ -84,15 +89,18 @@ const handlePage = (e: string) => {
                              z-index: 1000000;
                              top: 10px;
                              left: 10px;
-                             padding: 10px;`
+                             box-shadow: 0 0 10px #898989;
+                             width: ${iframe.width};
+                             height: ${iframe.height};
+                             border-radius: 10px;`
         let img = document.createElement('img')
         img.src = dragImg;
         img.id = timeS + '-'
         img.style.cssText = `width: 20px;
                             height: 20px;
                             position: absolute;
-                            top: 0px;
-                            left: 0px;
+                            top: -10px;
+                            left: -10px;
                             cursor: grab;`;
         div.appendChild(img);
         div.appendChild(contentIframe);
@@ -106,17 +114,25 @@ const handlePage = (e: string) => {
         //@ts-ignore
         postMessage = new PostMessage(contentIframe.contentWindow)
         postMessage.send("hello")
+        DIV = div
 
     } else if (e == eventTypes.close) {
         document.querySelector(`#${timeS}`) && document.querySelector(`#${timeS}`)!.remove()
     }
 }
-chrome.runtime.onMessage.addListener((request) => {
-    //css移出|添加
-    handleCss(request.info)
-    //js关闭|开启
-    handleEvent(request.info)
-    //iframe移出|添加
-    handlePage(request.info)
+chrome.runtime.onMessage.addListener((request:Message) => {
+    if (request.type=='number'&&DIV) { 
+        const num = ((+request.info)/100).toFixed(2).toString();        
+        DIV.style.opacity = num
+    }
+    else {
+        //css移出|添加
+        handleCss(request.info)
+        //js关闭|开启
+        handleEvent(request.info)
+        //iframe移出|添加
+        handlePage(request.info)
+    }
+
     return undefined
 })

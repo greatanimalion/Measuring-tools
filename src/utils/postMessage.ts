@@ -11,7 +11,7 @@ class PostMessage {
         else this.iFrame!.postMessage(message,'*');
     }
     private handle(e: MessageEvent) { 
-        if(e.data.source!="react-devtools-content-script")console.log(e);
+        if(e.data.source!="react-devtools-content-script"&&e.data.source!='react-devtools-bridge')console.log(e);
         
     }
     destroy() {
