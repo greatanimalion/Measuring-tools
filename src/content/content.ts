@@ -9,6 +9,18 @@ const style = `
     outline: 1px solid red;
     }
 `
+const attrs=[
+    "top",
+    "left",
+    "width",
+    "height",
+    "border",
+    "color",
+    "backgroundColor",
+    "opacity",
+    "border-radius",
+    "box-shadow",
+]
 let postMessage: any;
 let preEl: Element | null = null
 let dragOpen = false;
@@ -16,6 +28,20 @@ let dragTarget: HTMLElement | null = null;
 //@ts-ignore
 let centralEl: HTMLElement | null = null;
 let onCneter = false;
+const handleMessage = (e: HTMLElement) => {
+    const ElementMessage={tagName:''} as CSSStyleDeclaration&{tagName:string}
+    ElementMessage.tagName = e.tagName.toLowerCase()
+    attrs.forEach((attr) => {
+        //@ts-ignore
+        ElementMessage[attr] = getComputedStyle(e)[attr]
+    })
+    //非正常手段
+    ElementMessage.width=e.getClientRects()[0].width.toFixed(0)+'px'
+    ElementMessage.top=e.getClientRects()[0].top.toFixed(0)+"px"
+    ElementMessage.height=e.getClientRects()[0].height.toFixed(0)+'px'
+    ElementMessage.left=e.getClientRects()[0].left.toFixed(0)+'px'
+    return ElementMessage
+}
 
 const MeasureTools = (event: MouseEvent) => {
     if (dragOpen) {
@@ -41,9 +67,7 @@ const centralElClick = (e: KeyboardEvent) => {
         if (!onCneter) {
             centralEl = null
         }
-        else {
-            postMessage.send("hello")
-        }
+        else if(centralEl){ postMessage.send(handleMessage(centralEl))}
     }
 }
 //@ts-ignore
@@ -74,8 +98,6 @@ const handlePage = (e: string) => {
     if (e == eventTypes.open) {
         const contentIframe = document.querySelector("#" + timeS) as HTMLIFrameElement || document.createElement("iframe");
         contentIframe.id = timeS;
-        console.log(iframe.width, iframe.height);
-
         contentIframe.style.cssText = `width: ${iframe.width};
                                        height: ${iframe.height};
                                        border: none;

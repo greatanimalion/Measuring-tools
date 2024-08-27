@@ -7,7 +7,15 @@ function get(key:any){
     });
 }
 function set(Object:any){
-    chrome.storage.local.set(Object);
+    console.log('set',Object);
+    
+    chrome.storage.local.set(Object).then((e)=>{
+            console.log("set success",e);
+            
+    }, (e)=>{
+        console.log("Error in set",e);
+        
+    });;
 }
 const debouncedSet = debounce(set, 100);
 export {

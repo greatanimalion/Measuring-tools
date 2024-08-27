@@ -6,7 +6,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-
+import { ElementMessage } from './ElemenetMessage';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -17,7 +17,6 @@ interface TabPanelProps {
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
-
   return (
     <Typography
       component="div"
@@ -27,7 +26,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`action-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box sx={{ p: 3 }} style={{padding: 10,overflow:'hidden',backgroundColor:'#fff',minHeight:100}}>{children}</Box>}
     </Typography>
   );
 }
@@ -61,7 +60,7 @@ export default function FloatingActionButtonZoom() {
         maxHeight: 200,
       }}
     >
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="default" style={{position:'fixed',top:0,zIndex:9999}}>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -80,8 +79,8 @@ export default function FloatingActionButtonZoom() {
         index={value}
         onChangeIndex={handleChangeIndex}
       >
-        <TabPanel value={value} index={0} dir={theme.direction}>
-          Item One
+        <TabPanel value={value} index={0} dir={theme.direction} >
+          <ElementMessage />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           Item Two

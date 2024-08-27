@@ -1,30 +1,37 @@
 import { Slider } from '@mui/material';
-import { debouncedSet ,get } from '../../utils/chormeStorage';
+import { set, get } from '../../utils/chormeStorage';
 import type { Message } from '../../types/message';
 import { useEffect, useState } from 'react';
-const opacityChange = (value:number) => {
+const opacityChange = (value: number) => {
     chrome.tabs.query({
         active: true,
         currentWindow: true
     }, (tabs) => {
         let message = {
             info: value.toString(),
-            type:'number'
+            type: 'number'
         } as Message
-        if (tabs[0] && tabs[0].id) chrome.tabs.sendMessage(tabs[0].id, message, undefined, (response) => {
-            console.log(response);
-        })
+        if (tabs[0] && tabs[0].id) {
+            try {
+                chrome.tabs.sendMessage(tabs[0].id, message, undefined, (response) => {
+                    console.log(response);
+                })
+            }catch (error) {
+                console.error(error);
+            }
+          
+        }
     })
-    debouncedSet('value', value);
+    set({ value });
 }
-export default  function Control() {
-    const [value, setValue]=useState(100);
+export default function Control() {
+    const [value, setValue] = useState(100);
     useEffect(() => {
-      get('value').then((value) => {
-         if (value) setValue(value as number);
-      });
-       
-    },[value])
+        get('value').then((value) => {
+            if (value) setValue(value as number);
+        });
+
+    }, [value])
 
     return <>
         <div id='control'>
