@@ -19,8 +19,7 @@ export const ElementMessage = () => {
   })
   return <>
     <div style={{ marginTop: '48px' }}>
-      {i}
-      {!!i?<h1 style={{color:"#616161",marginTop:"20px",textAlign:"center"}}>按住Q键可选中元素，再次按下取消</h1>:<></>}
+      {!!i?<h1 style={{color:"#616161",marginTop:"20px",textAlign:"center"}}>按住Q键可选中元素，再次按下取消</h1>:i}
     </div>
 
   </>;
